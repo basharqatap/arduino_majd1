@@ -70,6 +70,10 @@ delay(500);:
 ===========================================================================================================================================================================
 example2 :
 
+
+
+
+
  1. وصف وشرح فكرة السؤال:
 المطلوب هو برمجة دائرة إلكترونية تحتوي على LED أحمر وآخر أخضر بحيث:
 - الـ LED الأحمر يومض 4 مرات خلال 4 ثوانٍ (أي مرة كل ثانية).
@@ -77,6 +81,45 @@ example2 :
 - يجب أن يبدأ كلاهما في العمل في نفس الوقت وبدون استخدام دالة التاخير delay
 
  2. شرح الكود:
+    the code:
+const int redLED = 13;   
+const int greenLED = 12;  
+
+
+unsigned long previousRedMillis = 0;  
+unsigned long previousGreenMillis = 0; 
+
+
+const long redInterval = 500;  
+const long greenInterval = 250; 
+
+
+bool redState = LOW;   
+bool greenState = LOW; 
+
+void setup() {
+
+  pinMode(redLED, OUTPUT);
+  pinMode(greenLED, OUTPUT);
+}
+
+void loop() {
+
+  unsigned long currentMillis = millis();
+
+  
+  if (currentMillis - previousRedMillis >= redInterval) {
+    previousRedMillis = currentMillis; 
+    redState = !redState;             
+    digitalWrite(redLED, redState);  
+  }
+
+  if (currentMillis - previousGreenMillis >= greenInterval) {
+    previousGreenMillis = currentMillis; 
+    greenState = !greenState;           
+    digitalWrite(greenLED, greenState);  
+  }
+}
 
 ```cpp
  تعريف الأطراف (Pins) التي سيتم توصيل الـ LEDs بها
