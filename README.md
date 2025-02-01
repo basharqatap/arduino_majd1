@@ -76,26 +76,84 @@ void loop() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ===============================================================================================================
 Example 2 :
+فكرة المثال:
+السؤال يطلب كتابة كود يجعل LED أحمر يلمع 4 مرات في 4 ثوانٍ، وLED أخضر يلمع 4 مرات في ثانيتين، مع شرط أن يعملا في نفس الوقت. أي أن الـ LED الأحمر يلمع كل ثانية (4 مرات في 4 ثوانٍ)، والـ LED الأخضر يلمع كل 0.5 ثانية (4 مرات في ثانيتين).
+
+شرح الكود:
+
+ تعريف المتغيرات:
+
+-----
+const int redLED = 13;   
+const int greenLED = 12;  
+
+unsigned long previousRedMillis = 0;  
+unsigned long previousGreenMillis = 0; 
+
+const long redInterval = 500;  
+const long greenInterval = 250; 
+
+bool redState = LOW;   
+bool greenState = LOW; 
+-----
+
+  - redLED و greenLED`: يتم تعريف الطرفين (Pins) اللذين سيتم توصيل الـ LED الأحمر والأخضر بهما.
+  - previousRedMillis و `previousGreenMillis: متغيرات لتخزين الوقت الأخير الذي تم فيه تغيير حالة الـ LED.
+  - redInterval و `greenInterval`: الفترات الزمنية بين كل ومضة للـ LED الأحمر (500 مللي ثانية) والأخضر (250 مللي ثانية).
+  - redState و `greenState`: متغيرات لتخزين الحالة الحالية للـ LED (HIGH أو LOW).
+
+---
+
+ دالة setup()`:
+
+```cpp
+void setup() {
+  pinMode(redLED, OUTPUT);
+  pinMode(greenLED, OUTPUT);
+}
+```
+
+- الشرح:
+  - `pinMode(redLED, OUTPUT)`: يتم تهيئة الطرف `redLED` كمخرج (OUTPUT) للتحكم في الـ LED الأحمر.
+  - `pinMode(greenLED, OUTPUT)`: يتم تهيئة الطرف `greenLED` كمخرج (OUTPUT) للتحكم في الـ LED الأخضر.
+
+---
+
+ دالة loop():
+
+--------------
+void loop() {
+  unsigned long currentMillis = millis();
+
+  if (currentMillis - previousRedMillis >= redInterval) {
+    previousRedMillis = currentMillis; 
+    redState = !redState;             
+    digitalWrite(redLED, redState);  
+  }
+
+  if (currentMillis - previousGreenMillis >= greenInterval) {
+    previousGreenMillis = currentMillis; 
+    greenState = !greenState;           
+    digitalWrite(greenLED, greenState);  
+  }
+}
+
+
+- الشرح:
+  - currentMillis = millis(): يتم تخزين الوقت الحالي منذ بدء تشغيل الأردوينو.
+  - الشرط الأول (if):
+    - يتم التحقق إذا كان الوقت المنقضي منذ آخر تغيير لحالة الـ LED الأحمر يساوي أو يزيد عن redInterval (500 مللي ثانية).
+    - إذا تحقق الشرط، يتم تحديث `previousRedMillis` بالوقت الحالي، وتغيير حالة الـ LED الأحمر (`redState`) من HIGH إلى LOW أو العكس.
+    - يتم تطبيق الحالة الجديدة على الـ LED الأحمر باستخدام `digitalWrite`.
+  - الشرط الثاني (if):
+    - يتم التحقق إذا كان الوقت المنقضي منذ آخر تغيير لحالة الـ LED الأخضر يساوي أو يزيد عن `greenInterval` (250 مللي ثانية).
+    - إذا تحقق الشرط، يتم تحديث `previousGreenMillis` بالوقت الحالي، وتغيير حالة الـ LED الأخضر (`greenState`) من HIGH إلى LOW أو العكس.
+    - يتم تطبيق الحالة الجديدة على الـ LED الأخضر باستخدام `digitalWrite`.
+
+
+
 
 
 
